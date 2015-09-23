@@ -1,0 +1,30 @@
+language: julia
+os:
+  - linux
+  - osx
+julia:
+  - 0.3
+  - 0.4
+notifications:
+  email: false
+sudo: false
+cache:
+  directories:
+  - $HOME/usr
+addons:
+  apt_packages:
+  - gfortran
+env:
+  - MAKEFLAGS="-j3"
+    LD_LIBRARY_PATH=$HOME/usr/lib
+# uncomment the following lines to override the default test script
+script:
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - julia -e 'Pkg.clone(pwd()); Pkg.test("AmplNLWriter", coverage=true)'
+before_cache:
+  - cp -R $HOME/.julia/*/Cbc/deps/usr $HOME
+  - cp -R $HOME/.julia/*/Ipopt/deps/usr $HOME
+  - cp -R $HOME/.julia/*/CoinOptServices/deps/usr $HOME
+after_success:
+  - echo $TRAVIS_JULIA_VERSION
+  - julia -e 'Pkg.add("Coverage"); cd(Pkg.dir("AmplNLWriter")); using Coverage; Codecov.submit(Codecov.process_folder())'

@@ -28,7 +28,7 @@ for solver in solvers
     end
 end
 
-include(Pkg.dir("JuMP","test","solvers.jl"))
-include(Pkg.dir("JuMP","test","nonlinear.jl"))
+# include(Pkg.dir("JuMP","test","solvers.jl"))
+# include(Pkg.dir("JuMP","test","nonlinear.jl"))
 
 FactCheck.exitstatus()
